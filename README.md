@@ -1,0 +1,5 @@
+# Installlation
+
+```bash
+stow .
+```
