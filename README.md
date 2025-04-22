@@ -1,4 +1,4 @@
-# Installlation
+# Installation
 
 ```bash
 stow .
