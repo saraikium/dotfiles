@@ -32,10 +32,37 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
--- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
--- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
--- vim.keymap.set("n", "<C-S-j>", "<C-w>J", { desc = "Move window to the lower" })
--- vim.keymap.set("n", "<C-S-k>", "<C-w>K", { desc = "Move window to the upper" })
+vim.keymap.set('n', '<C-S-h>', '<C-w>H', { desc = 'Move window to the left' })
+vim.keymap.set('n', '<C-S-l>', '<C-w>L', { desc = 'Move window to the right' })
+vim.keymap.set('n', '<C-S-j>', '<C-w>J', { desc = 'Move window to the lower' })
+vim.keymap.set('n', '<C-S-k>', '<C-w>K', { desc = 'Move window to the upper' })
+
+-- NeoTree related keybindings
+vim.keymap.set('n', '<leader>e', function()
+  -- Get the full path of the current buffer's file
+  local current_file = vim.fn.expand '%:p'
+  -- Get the buffer type (e.g., '', 'nofile', 'terminal', 'help')
+  local buftype = vim.bo.buftype
+
+  -- Prepare arguments for the Neo-tree command
+  local args = {
+    action = 'toggle', -- Toggle the tree open/closed
+    source = 'filesystem', -- Ensure it's the file system source
+    position = 'left', -- Or "right" depending on your preference
+  }
+
+  -- Check if the current buffer is a regular file buffer and has a path
+  if current_file ~= '' and buftype == '' then
+    -- If it's a file, add the reveal_file argument
+    args.reveal_file = current_file
+    -- Optional: force changing the working directory if the file is outside the current root
+    args.reveal_force_cwd = true
+  end
+
+  -- Execute the Neo-tree command with the prepared arguments
+  -- Lazy.nvim ensures the plugin is loaded before this function is called by the keymap.
+  require('neo-tree.command').execute(args)
+end)
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
